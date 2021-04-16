@@ -1,4 +1,4 @@
 import os
 
 if __name__ == '__main__':
-    os.system("scrapy crawl mercado")
+    os.system("scrapy crawl mercadolibre_redis")
