@@ -10,8 +10,8 @@ from scrapy_redis.spiders import RedisCrawlSpider
 
 class MercadolibreRedisSpider(RedisCrawlSpider):
     """Spider that reads urls from redis queue (myspider:start_urls)."""
-    name = 'mercadolibre_redis'
-    redis_key = 'mercadolibre_redis:start_urls'
+    name = 'quanzhan'
+    redis_key = 'quanzhan:start_urls'
 #爬取整站
     rules = (    
         Rule(LinkExtractor(allow=r'.*/c/.*#c_id=.*'),follow=True),
