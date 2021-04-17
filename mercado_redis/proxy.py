@@ -1,13 +1,14 @@
 import random
 from scrapy.exceptions import CloseSpider
+from .proxyip import PROXIES
 class ProxyMiddleware(object):
     #def process_request(self, request, spider):
     #    request.meta['proxy'] = 'http://107.173.122.99:8888'
     def process_request(self, request, spider):
-        #ip = random.choice(spider.settings.get('PROXIES'))
-        ip = random.randint(8,254)
-        ip = "http://23.231.106."+str(ip)+":8888"   
-        #print('测试IP:', ip)
+        ip = random.choice(PROXIES)
+        #ip = random.randint(8,254)
+        #ip = "http://23.231.106."+str(ip)+":8888"   
+        print('测试IP:', ip)
         request.meta['proxy'] = ip
 
 class CheckStatusMiddleware(object):
