@@ -14,8 +14,8 @@ class ProxyMiddleware(object):
         #ip = random.choice(PROXIES)
         #ip = random.randint(8,254)
         #ip = "http://23.231.106."+str(ip)+":8888"   
-        print('测试IP:',ip)
-        print('本地IP:',ipv4)
+        #print('测试IP:',ip)
+        #print('本地IP:',ipv4)
         request.meta['proxy'] = ip
 
 class CheckStatusMiddleware(object):
