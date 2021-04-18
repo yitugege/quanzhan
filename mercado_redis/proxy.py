@@ -3,11 +3,13 @@ from scrapy.exceptions import CloseSpider
 from .proxyip import PROXIES
 import os
 class ProxyMiddleware(object):
+    def __init__(self):
+        self.ipv4 = os.popen('ip addr show ens18').read().split("inet ")[1].split("/")[0]        
     #def process_request(self, request, spider):
     #    request.meta['proxy'] = 'http://107.173.122.99:8888'
     def process_request(self, request, spider):
         #获取当前服务器内网ip,执行对应代理
-        ipv4 = os.popen('ip addr show ens18').read().split("inet ")[1].split("/")[0]
+        ipv4 = self.ipv4
         ip = PROXIES.get(ipv4)
         #ip = random.choice(PROXIES)
         #ip = random.randint(8,254)
