@@ -13,7 +13,7 @@ class MercadoRedisItem(scrapy.Item):
     price = scrapy.Field()    #string
     Num_sell = scrapy.Field() #int 
     like_count = scrapy.Field()  #int
-    seller = scrapy.Field()  #string
+    category = scrapy.Field()  #string
     id = scrapy.Field()   #string
     url = scrapy.Field()  #string
     current_time = scrapy.Field()   #string

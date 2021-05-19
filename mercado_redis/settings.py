@@ -44,13 +44,15 @@ DOWNLOAD_DELAY = 0.5
 DEFAULT_REQUEST_HEADERS = {
    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
    'Accept-Language': 'es',
-   'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36'
+   'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36'
 }
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-#SPIDER_MIDDLEWARES = {
-#    'mercado_redis.middlewares.MercadoRedisSpiderMiddleware': 543,
-#}
+SPIDER_MIDDLEWARES = {
+    #'mercadolibre.middlewares.MercadolibreSpiderMiddleware': 543,
+    #scrapy 解决Ignoring link的异常
+    'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware': None
+}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
@@ -61,7 +63,7 @@ DOWNLOADER_MIDDLEWARES = {
     'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
     'scrapy_fake_useragent.middleware.RandomUserAgentMiddleware': 400,
     'mercado_redis.proxy.ProxyMiddleware':401,
-    'mercado_redis.proxy.CheckStatusMiddleware':402
+    #'mercado_redis.proxy.CheckStatusMiddleware':402
 }
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html

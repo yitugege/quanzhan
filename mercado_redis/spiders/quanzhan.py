@@ -14,10 +14,27 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
     redis_key = 'quanzhan:start_urls'
 #爬取整站
     rules = (    
-        Rule(LinkExtractor(allow=r'.*/c/.*#c_id=.*'),follow=True),
-        Rule(LinkExtractor(allow=r'.*CATEGORY_ID=M\w\w.\d+.*'), follow=True),
+        #Rule(LinkExtractor(allow=r'.*#c_id=.*'),follow=True),
+        Rule(LinkExtractor(allow=r'.*#c_id=.*',deny=(  r'.*accesorios-para-vehiculos.*',
+                                                        r'.*agro.*',
+                                                        r'.*alimentos-y-bebidas.*',
+                                                        r'.*animales-y-mascotas.*',
+                                                        r'.*antiguedades-y-colecciones.*',
+                                                        r'.*boletas-para-espectaculos.*',
+                                                        r'.*carros-motos-y-otros.*',
+                                                        r'.*construccion.*',
+                                                        r'.*inmuebles.*',
+                                                        r'.*instrumentos-musicales.*',
+                                                        r'.*libros-revistas-y-comics.*',
+                                                        r'.*musica-peliculas-y-series.*',
+                                                        r'.*recuerdos-pinateria-y-fiestas.*',
+                                                        r'.*relojes-y-joyas.*',
+                                                        r'.*otras-categorias.*',
+                                                        r'.*servicios.*',
+                                                        )),follow=True),
+        Rule(LinkExtractor(allow=r'.*CATEGORY_ID=.*'), follow=True),
         Rule(LinkExtractor(allow=r'.*%3Dcategory%.*'),follow=True),
-        Rule(LinkExtractor(allow=r'.*/_Desde_\d+$'),follow=True),#下一页  follow = true的意思是下一次提取网页中包含我们我们需要提取的信息,True代表继续提取
+        Rule(LinkExtractor(allow=r'.*/_Desde_.\d'),follow=True),#下一页  follow = true的意思是下一次提取网页中包含我们我们需要提取的信息,True代表继续提取
         Rule(LinkExtractor(allow=r'.*/M\w\w(\d+|-\d+|/).*',deny=( r'.*/jms/mlm/lgz/login.*',
                                                             r'.*noindex.*',
                                                             r'.*auth.*',
@@ -48,7 +65,7 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
 
 
         #获取价格
-        price = response.xpath('//div[@class="ui-pdp-price__second-line"]/span[@class="price-tag ui-pdp-price__part"]/span[@class="price-tag-fraction"]/text()').get()
+        price = response.xpath('//div[@class="ui-pdp-price__second-line"]/span[@class="price-tag ui-pdp-price__part"]/span[@class="price-tag-amount"]/span[@class="price-tag-fraction"]/text()').get()
         if  price == None:
             return
         #打印点赞人数,把数组中的数字提取出来转换城数字
@@ -63,7 +80,9 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
         #print("-----------------------------------likeaccount--------------------------")
         #print(like_count)
         #打印店铺
-        seller = response.xpath('//a[@class="ui-pdp-action-modal__link"]/span[@class="ui-pdp-color--BLUE"]/text()').get()
+        #seller = response.xpath('//a[@class="ui-pdp-action-modal__link"]/span[@class="ui-pdp-color--BLUE"]/text()').get()
+        #获取分类
+        category = response.xpath('//li[@class="andes-breadcrumb__item"][1]/a[@class="andes-breadcrumb__link"]/@title').get()
         #获取销量,判读是否为usado,如果不是那么取整数，如果是不做操作
         Num_sell = response.xpath('//div[@class="ui-pdp-header"]/div[@class="ui-pdp-header__subtitle"]/span[@class="ui-pdp-subtitle"]/text()').get()
         if  Num_sell is None:
@@ -100,7 +119,7 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
         items['price']=price
         items['like_count']=like_count
         items['id']=id
-        items['seller']=seller
+        items['category']=category
         items['Num_sell']=Num_sell
         items['current_time']=current_time
         items['days60_sell']=days60_sell
