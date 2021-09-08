@@ -31,8 +31,8 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
                                                         r'.*relojes-y-joyas.*',
                                                         r'.*otras-categorias.*',
                                                         r'.*servicios.*',
-                                                        )),follow=True),
-        Rule(LinkExtractor(allow=r'.*CATEGORY_ID=.*'), follow=True),
+                                                        )),follow=False),
+        Rule(LinkExtractor(allow=r'.*CATEGORY_ID=.*'), follow=False),
         Rule(LinkExtractor(allow=r'.*%3Dcategory%.*'),follow=True),
         Rule(LinkExtractor(allow=r'.*/_Desde_.\d'),follow=True),#下一页  follow = true的意思是下一次提取网页中包含我们我们需要提取的信息,True代表继续提取
         Rule(LinkExtractor(allow=r'.*/M\w\w(\d+|-\d+|/).*',deny=( r'.*/jms/mlm/lgz/login.*',
@@ -42,7 +42,7 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
                                                             r'.*/seller-info$',
                                                             r'.*pdp_filters=category:.*',
                                                             r'.*method=add.*',
-                                                            r'.*/s$')),callback='parse',follow=True)
+                                                            r'.*/s$')),callback='parse',follow=False)
         
     )  
     def parse (self,response):
