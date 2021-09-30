@@ -14,7 +14,7 @@ class QuotesSpider(scrapy.Spider):
 
     def start_requests(self):
         urls = [
-            'https://click1.mercadolibre.com.ar/mclics/clicks/external/MLA/count?a=%2B7hcyiZotXmhCS6MasGapiCYSPOOtW6l9GNm5P7OelcmDCHFVSkW3lFNlEl568ttVdxWXp0RG%2FgaD6eV7bQ%2B2ZeY7OzkyBWtO%2FNxiXgHtMD7PqYaG5OocSrRCb3C22fo4X0PNY%2Fhv3ks07I09OXl%2FTIUYrO%2FTZ5SWE3VhsOB7HySbB%2FtLgkW52t9ypAj5Ee0ZHrW%2FEzBav0UZrqkDr%2BvmpPGCMA3YU9Itv5uU1n0fkTk4IckjmaaB%2Fcv3jP75NNdPnMML8pg%2FmSWMZqpLlERusMSYWT8qfInhg5krZM760prPghCvWvv%2FhAKxQ6QInbt6EJf0FEztKVlzhMRnUwqC701Hoijl5Fp9o%2B9%2FXCBfGQRZDMdy1ETyvWAQkBCM344RUVT%2FJWrQBkh7DuFRbkX2Bsaxp%2FS9stGm4Ilim3eJN3j%2B2rKL48d5FOKDXcNG1gBelE4eygaaGLCUON9QQIrWlf%2FaGRjzgE7HUGVXSziZn3qNT2du1S8ZP5J2ru20Dm51LyuifKkgDfWMvzEhwfqEWxYSSuTZli5',
+            'https://www.mercadolivre.com.br/piscina-estrutural-retangular-mor-001025-com-capacidade-de-6200-litros-de-399m-de-comprimento-x-206m-de-largura-azul/p/MLB11522994',
             ]
         for url in urls:
             yield scrapy.Request(url=url,dont_filter=True,callback=self.parse)
