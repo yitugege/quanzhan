@@ -27,8 +27,10 @@ class MercadoRedisPipeline:
        dbObject = dbHandle()
        cursor = dbObject.cursor()
        cursor.execute("USE scrapy")
+       tablename= item['tablename']
        #判断如果存在则更新，如果不存在则插入
-       sql = "INSERT INTO quanzhan(title,url,price,id,category,like_count,Num_sell,time,days60_sell) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s) ON DUPLICATE KEY UPDATE Num_sell=%s,title=%s,url=%s,price=%s,category=%s,like_count=%s,time=%s,days60_sell=%s"
+       sql = "INSERT INTO %s" % tablename + "(title,url,price,id,category,like_count,Num_sell,time,days60_sell) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s) ON DUPLICATE KEY UPDATE Num_sell=%s,title=%s,url=%s,price=%s,category=%s,like_count=%s,time=%s,days60_sell=%s"
+       print (sql)
        try:
             cursor.execute(sql,(item['title'],item['url'],item['price'],item['id'],item['category'],item['like_count'],item['Num_sell'],item['current_time'],item['days60_sell'],item['Num_sell'],item['title'],item['url'],item['price'],item['category'],item['like_count'],item['current_time'],item['days60_sell']))
             cursor.connection.commit()

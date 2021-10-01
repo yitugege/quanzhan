@@ -10,10 +10,10 @@ from scrapy_redis.spiders import RedisCrawlSpider
 
 class MercadolibreRedisSpider(RedisCrawlSpider):
     """Spider that reads urls from redis queue (myspider:start_urls)."""
-    name = 'mexico'
-    redis_key = 'mexico:start_urls'
+    name = 'quanzhan'
+    redis_key = 'quanzhan:start_urls'
 #爬取整站
-    rules = (    
+    rules = (
         #Rule(LinkExtractor(allow=r'.*#c_id=.*'),follow=True),
         Rule(LinkExtractor(allow=r'.*#c_id=.*',deny=(  r'.*accesorios-para-vehiculos.*',
                                                         r'.*agro.*',
@@ -31,20 +31,20 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
                                                         r'.*relojes-y-joyas.*',
                                                         r'.*otras-categorias.*',
                                                         r'.*servicios.*',
-                                                        )),follow=False),
-        Rule(LinkExtractor(allow=r'.*CATEGORY_ID=.*'), follow=False),
+                                                        )),follow=True),
+        Rule(LinkExtractor(allow=r'.*CATEGORY_ID=.*'), follow=True),
         Rule(LinkExtractor(allow=r'.*%3Dcategory%.*'),follow=True),
         Rule(LinkExtractor(allow=r'.*/_Desde_.\d'),follow=True),#下一页  follow = true的意思是下一次提取网页中包含我们我们需要提取的信息,True代表继续提取
         Rule(LinkExtractor(allow=r'.*/M\w\w(\d+|-\d+|/).*',deny=( r'.*/jms/mlm/lgz/login.*',
                                                             r'.*noindex.*',
                                                             r'.*auth.*',
-                                                            r'.*product_trigger_id=MLM+\d+',
+                                                            r'.*product_trigger_id=M\w\w\d+',
                                                             r'.*/seller-info$',
                                                             r'.*pdp_filters=category:.*',
                                                             r'.*method=add.*',
-                                                            r'.*/s$')),callback='parse',follow=False)
-        
-    )  
+                                                            r'.*/s$')),callback='parse',follow=True)
+
+    )
     def parse (self,response):
         #print('--------------------当前连接----------------')
         #print(response.url)
@@ -61,7 +61,7 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
             return
         else:
             id = id[0]
-        
+
 
 
         #获取价格
@@ -123,6 +123,5 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
         items['Num_sell']=Num_sell
         items['current_time']=current_time
         items['days60_sell']=days60_sell
-
+        items['tablename'] =self.name
         return items
-

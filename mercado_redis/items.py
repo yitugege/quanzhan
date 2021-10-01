@@ -18,4 +18,5 @@ class MercadoRedisItem(scrapy.Item):
     url = scrapy.Field()  #string
     current_time = scrapy.Field()   #string
     days60_sell = scrapy.Field()   #string
+    tablename = scrapy.Field() #string
     pass
