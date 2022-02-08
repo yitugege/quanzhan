@@ -14,7 +14,7 @@ class QuotesSpider(scrapy.Spider):
 
     def start_requests(self):
         urls = [
-            'https://www.mercadolivre.com.br/piscina-estrutural-retangular-mor-001025-com-capacidade-de-6200-litros-de-399m-de-comprimento-x-206m-de-largura-azul/p/MLB11522994',
+            'https://articulo.mercadolibre.com.mx/MLM-1352985740-10-soportes-tv-monitor-pantalla-14-a-43-pulgada-tl1412n17-10-_JM?searchVariation=173993322933#searchVariation=173993322933&position=1&search_layout=stack&type=item&tracking_id=225ed009-9f26-4960-a467-85a83174b918',
             ]
         for url in urls:
             yield scrapy.Request(url=url,dont_filter=True,callback=self.parse)
@@ -38,10 +38,10 @@ class QuotesSpider(scrapy.Spider):
         
 
 
-        #获取价格
-        price = response.xpath('//div[@class="ui-pdp-price__second-line"]/span[@class="price-tag ui-pdp-price__part"]/span[@class="price-tag-amount"]/span[@class="price-tag-fraction"]/text()').get()
+         #获取价格
+        price = response.xpath('//div[@class="ui-pdp-price__second-line"]/span[@class="andes-money-amount ui-pdp-price__part andes-money-amount--cents-superscript"]/span[@class="andes-money-amount__fraction"]/text()').get()
         if  price == None:
-            pass
+            price = 0
         #打印点赞人数,把数组中的数字提取出来转换城数字
         like_count = response.xpath('//a[@class="ui-pdp-review__label ui-pdp-review__label--link"]/span[@class="ui-pdp-review__amount"]/text()').get()
         if like_count != None:
@@ -60,7 +60,8 @@ class QuotesSpider(scrapy.Spider):
         #获取销量,判读是否为usado,如果不是那么取整数，如果是不做操作
         Num_sell = response.xpath('//div[@class="ui-pdp-header"]/div[@class="ui-pdp-header__subtitle"]/span[@class="ui-pdp-subtitle"]/text()').get()
         if  Num_sell is None:
-            return
+            Num_sell = 0
+        #    return
         #print("-----------------------------------Num_sell--------------------------")
         #print(Num_sell)
         #print(type(Num_sell))
@@ -72,17 +73,18 @@ class QuotesSpider(scrapy.Spider):
             #print(Num_sell)
             #print(type(Num_sell))
         else:
-            return
+            Num_sell = None
         #获取60天销量
         days60_sell=response.xpath('//strong[@class="ui-pdp-seller__sales-description"]/text()').get()
         if days60_sell is None:
-            return
+            days60_sell = 0   
+        #    return
         elif bool(re.findall(r'\d+',days60_sell)):
             days60_sell = re.findall(r'\d+',days60_sell)
             days60_sell = list(map(int,days60_sell))
             days60_sell = days60_sell[0]
         else:
-            return
+            days60_sell = None
         #记录爬取的时间
         #GMT_FORMAT = '%D %H:%M:%S'
         GMT_FORMAT = '%D'
@@ -97,6 +99,6 @@ class QuotesSpider(scrapy.Spider):
         items['Num_sell']=Num_sell
         items['current_time']=current_time
         items['days60_sell']=days60_sell
-
+        items['tablename'] =self.name
         return items
 

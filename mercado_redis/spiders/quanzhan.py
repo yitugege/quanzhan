@@ -10,8 +10,8 @@ from scrapy_redis.spiders import RedisCrawlSpider
 
 class MercadolibreRedisSpider(RedisCrawlSpider):
     """Spider that reads urls from redis queue (myspider:start_urls)."""
-    name = 'quanzhan'
-    redis_key = 'quanzhan:start_urls'
+    name = 'zhili'
+    redis_key = 'zhili:start_urls'
 #爬取整站
     rules = (
         #Rule(LinkExtractor(allow=r'.*#c_id=.*'),follow=True),
@@ -66,9 +66,10 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
 
 
         #获取价格
-        price = response.xpath('//div[@class="ui-pdp-price__second-line"]/span[@class="price-tag ui-pdp-price__part"]/span[@class="price-tag-amount"]/span[@class="price-tag-fraction"]/text()').get()
+        price = response.xpath('//div[@class="ui-pdp-price__second-line"]/span[@class="andes-money-amount ui-pdp-price__part andes-money-amount--cents-superscript"]/span[@class="andes-money-amount__fraction"]/text()').get()
         if  price == None:
-            return
+            price = 0
+        #    return
         #打印点赞人数,把数组中的数字提取出来转换城数字
         like_count = response.xpath('//a[@class="ui-pdp-review__label ui-pdp-review__label--link"]/span[@class="ui-pdp-review__amount"]/text()').get()
         if like_count != None:
@@ -76,7 +77,7 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
             like_count = list(map(int,like_count))
             like_count = like_count = like_count[0]
         else:
-            like_count = None
+            like_count = 0
 
         #print("-----------------------------------likeaccount--------------------------")
         #print(like_count)
@@ -87,7 +88,8 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
         #获取销量,判读是否为usado,如果不是那么取整数，如果是不做操作
         Num_sell = response.xpath('//div[@class="ui-pdp-header"]/div[@class="ui-pdp-header__subtitle"]/span[@class="ui-pdp-subtitle"]/text()').get()
         if  Num_sell is None:
-            return
+            Num_sell = 0
+        #    return
         #print("-----------------------------------Num_sell--------------------------")
         #print(Num_sell)
         #print(type(Num_sell))
@@ -99,17 +101,18 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
             #print(Num_sell)
             #print(type(Num_sell))
         else:
-            return
+            Num_sell = 0
         #获取60天销量
         days60_sell=response.xpath('//strong[@class="ui-pdp-seller__sales-description"]/text()').get()
         if days60_sell is None:
-            return
+            days60_sell = 0   
+        #    return
         elif bool(re.findall(r'\d+',days60_sell)):
             days60_sell = re.findall(r'\d+',days60_sell)
             days60_sell = list(map(int,days60_sell))
             days60_sell = days60_sell[0]
         else:
-            return
+            days60_sell = None
         #记录爬取的时间
         #GMT_FORMAT = '%D %H:%M:%S'
         GMT_FORMAT = '%D'

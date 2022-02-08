@@ -44,7 +44,7 @@ DOWNLOAD_DELAY = 1
 DEFAULT_REQUEST_HEADERS = {
    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
    'Accept-Language': 'es',
-   'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36'
+   'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.81 Safari/537.36'
 }
 
 # Enable or disable spider middlewares
@@ -122,6 +122,7 @@ AUTOTHROTTLE_TARGET_CONCURRENCY = 1
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 SCHEDULER = "scrapy_redis.scheduler.Scheduler"
 DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
-REDIS_URL = 'redis://user:123123...@192.168.3.200:6379'
+REDIS_HOST = '192.168.3.201'
+REDIS_PORT = 6379
 #允许处理403返回头
 HTTPERROR_ALLOWED_CODES = [403]
