@@ -57,13 +57,14 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
         #链接
         url = response.url
         #获取商品ID
-        id = re.findall(r"\d{8,}",url)
+        id = re.findall(r"/M\w\w(\d+|-\d+|/)",url)
+        #id = re.findall(r"\d{7,}",url)
         if  id != []:
-            id = int("".join([str(x) for x in id]))
+            id = abs(int("".join([str(x) for x in id])))
         else:
             url=response.request.meta['redirect_urls'][0]
-            id = re.findall(r"\d{8,}",url)
-            id = int("".join([str(x) for x in id]))
+            id = re.findall(r"/M\w\w(\d+|-\d+|/)",url)
+            id = abs(int("".join([str(x) for x in id])))
 
 
 
