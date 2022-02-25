@@ -25,11 +25,13 @@ class CheckStatusMiddleware(object):
             print("--"*10+"返回403错误"+"--"*10)
             raise CloseSpider('%s爬虫异常,退出!'%response.url)
             return None
+        elif response.status == 302:
+            print("--"*10+"返回302错误"+"--"*10)
+            return response
         else:
             return response
  
   #def process_response(self, request, response, spider):
     #print('代理IP:', request.meta['proxy'])
    # return response
-
         

@@ -6,7 +6,7 @@ import datetime
 
 #采集指定url
 class QuotesSpider(scrapy.Spider):
-    name = "dange"
+    name = "quanzhan"
     #allowed_domains = ["mercadolibre.com.mx"]
     #start_urls = ["https://articulo.mercadolibre.com.mx"]
     #base_urls ='https://computacion.mercadolibre.com.mx/'
@@ -14,7 +14,8 @@ class QuotesSpider(scrapy.Spider):
 
     def start_requests(self):
         urls = [
-            'https://articulo.mercadolibre.com.mx/MLM-1352985740-10-soportes-tv-monitor-pantalla-14-a-43-pulgada-tl1412n17-10-_JM?searchVariation=173993322933#searchVariation=173993322933&position=1&search_layout=stack&type=item&tracking_id=225ed009-9f26-4960-a467-85a83174b918',
+            'https://www.mercadolibre.com.mx/guitarra-electrica-yamaha-pac012100-series-112v-de-aliso-vintage-white-brillante-con-diapason-de-palo-de-rosa/p/MLM17517052',
+            'https://articulo.mercadolibre.com.mx/MLM-1300005017-4-altavoz-motorola-g7-power-g7-play-g8-power-original-4pzs-_JM'
             ]
         for url in urls:
             yield scrapy.Request(url=url,dont_filter=True,callback=self.parse)
@@ -22,21 +23,23 @@ class QuotesSpider(scrapy.Spider):
     def parse (self,response):
         print('--------------------当前连接----------------')
         print(response.url)
+        #print(response.request.meta['redirect_urls'][0])
         items = MercadoRedisItem()
-        #标题
+        #没有标题说明连接挂了，不抓,标记为delete
         title = response.xpath('//h1[@class="ui-pdp-title"]/text()').get()
         if  title == None:
-            pass
+            title = "delete"
         #链接
         url = response.url
-        #获取商品ID
+        #获取商品ID非空那么插入，否则抓取302之前的url获取id从数据库删除
         id = re.findall(r"\d{6,}",url)
-        if  id == None:
-            pass
+        if  id != []:
+            id = int("".join([str(x) for x in id]))
         else:
-            id = id[0]
-        
-
+            url=response.request.meta['redirect_urls'][0]
+            id = re.findall(r"\d{7,}",url)
+            id = int("".join([str(x) for x in id]))
+        print(id)
 
          #获取价格
         price = response.xpath('//div[@class="ui-pdp-price__second-line"]/span[@class="andes-money-amount ui-pdp-price__part andes-money-amount--cents-superscript"]/span[@class="andes-money-amount__fraction"]/text()').get()
@@ -77,7 +80,7 @@ class QuotesSpider(scrapy.Spider):
         #获取60天销量
         days60_sell=response.xpath('//strong[@class="ui-pdp-seller__sales-description"]/text()').get()
         if days60_sell is None:
-            days60_sell = 0   
+            days60_sell = 0
         #    return
         elif bool(re.findall(r'\d+',days60_sell)):
             days60_sell = re.findall(r'\d+',days60_sell)
@@ -101,4 +104,3 @@ class QuotesSpider(scrapy.Spider):
         items['days60_sell']=days60_sell
         items['tablename'] =self.name
         return items
-
