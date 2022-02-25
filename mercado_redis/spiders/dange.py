@@ -1,7 +1,7 @@
 import scrapy
 from ..items import MercadoRedisItem
 import re
-import datetime
+from datetime import date
 
 
 #采集指定url
@@ -15,7 +15,8 @@ class QuotesSpider(scrapy.Spider):
     def start_requests(self):
         urls = [
             'https://www.mercadolibre.com.mx/guitarra-electrica-yamaha-pac012100-series-112v-de-aliso-vintage-white-brillante-con-diapason-de-palo-de-rosa/p/MLM17517052',
-            'https://articulo.mercadolibre.com.mx/MLM-1300005017-4-altavoz-motorola-g7-power-g7-play-g8-power-original-4pzs-_JM'
+            'https://articulo.mercadolibre.com.mx/MLM-1300005017-4-altavoz-motorola-g7-power-g7-play-g8-power-original-4pzs-_JM',
+            'https://articulo.mercadolibre.com.mx/MLM-1367897814-auricular-con-flex-compatible-con-iphone-x-_JM#position=1&search_layout=stack&type=pad&tracking_id=8407e428-916d-4214-84f6-5d5cd4caf4c4&is_advertising=true&ad_domain=VQCATCORE_LST&ad_position=1&ad_click_id=ZDBjOTQzNTgtMjcwMC00ZjhkLWIyMTYtNmY1NDEwNmExZDQ4'
             ]
         for url in urls:
             yield scrapy.Request(url=url,dont_filter=True,callback=self.parse)
@@ -32,19 +33,20 @@ class QuotesSpider(scrapy.Spider):
         #链接
         url = response.url
         #获取商品ID非空那么插入，否则抓取302之前的url获取id从数据库删除
-        id = re.findall(r"\d{6,}",url)
+        #id = re.findall(r"/M\w\w(\d+|-\d+|/)",url)
+        id = re.findall(r"\d{8,}",url)
         if  id != []:
             id = int("".join([str(x) for x in id]))
         else:
             url=response.request.meta['redirect_urls'][0]
-            id = re.findall(r"\d{7,}",url)
+            id = re.findall(r"\d{8,}",url)
             id = int("".join([str(x) for x in id]))
         print(id)
 
-         #获取价格
+         #获取价格 没有价格删除连接
         price = response.xpath('//div[@class="ui-pdp-price__second-line"]/span[@class="andes-money-amount ui-pdp-price__part andes-money-amount--cents-superscript"]/span[@class="andes-money-amount__fraction"]/text()').get()
         if  price == None:
-            price = 0
+            title = "delete"
         #打印点赞人数,把数组中的数字提取出来转换城数字
         like_count = response.xpath('//a[@class="ui-pdp-review__label ui-pdp-review__label--link"]/span[@class="ui-pdp-review__amount"]/text()').get()
         if like_count != None:
@@ -60,11 +62,10 @@ class QuotesSpider(scrapy.Spider):
         #seller = response.xpath('//a[@class="ui-pdp-action-modal__link"]/span[@class="ui-pdp-color--BLUE"]/text()').get()
         #获取分类
         category = response.xpath('//li[@class="andes-breadcrumb__item"][1]/a[@class="andes-breadcrumb__link"]/@title').get()
-        #获取销量,判读是否为usado,如果不是那么取整数，如果是不做操作
+        #获取销量为0不抓,判读是否为usado,如果不是那么取整数，如果是不做操作,
         Num_sell = response.xpath('//div[@class="ui-pdp-header"]/div[@class="ui-pdp-header__subtitle"]/span[@class="ui-pdp-subtitle"]/text()').get()
         if  Num_sell is None:
-            Num_sell = 0
-        #    return
+            return
         #print("-----------------------------------Num_sell--------------------------")
         #print(Num_sell)
         #print(type(Num_sell))
@@ -76,7 +77,7 @@ class QuotesSpider(scrapy.Spider):
             #print(Num_sell)
             #print(type(Num_sell))
         else:
-            Num_sell = None
+            return
         #获取60天销量
         days60_sell=response.xpath('//strong[@class="ui-pdp-seller__sales-description"]/text()').get()
         if days60_sell is None:
@@ -89,9 +90,7 @@ class QuotesSpider(scrapy.Spider):
         else:
             days60_sell = None
         #记录爬取的时间
-        #GMT_FORMAT = '%D %H:%M:%S'
-        GMT_FORMAT = '%D'
-        current_time = datetime.datetime.utcnow().strftime(GMT_FORMAT)
+        current_time = date.today()
 
         items['title']=title
         items['url']=url
