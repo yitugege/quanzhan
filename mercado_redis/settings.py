@@ -62,7 +62,7 @@ SPIDER_MIDDLEWARES = {
 #}
 DOWNLOADER_MIDDLEWARES = {
     'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
-    'scrapy_fake_useragent.middleware.RandomUserAgentMiddleware': 400,
+#    'scrapy_fake_useragent.middleware.RandomUserAgentMiddleware': 400,
     'mercado_redis.proxy.ProxyMiddleware':401,
     'mercado_redis.proxy.CheckStatusMiddleware':402,
 }
@@ -122,8 +122,9 @@ AUTOTHROTTLE_TARGET_CONCURRENCY = 1
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 SCHEDULER = "scrapy_redis.scheduler.Scheduler"
 DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
-REDIS_HOST = '192.168.3.201'
-REDIS_PORT = 6379
+#REDIS_HOST = '192.168.3.201'
+#REDIS_PORT = 6379
+REDIS_URL = 'redis://user:8Os2OWgr8Af7NofSMOI0ni/TuTlT1pYOK2zDQKmL0rPGM3IRiQ1RL5ah7JexpS8fNU8oiYfzsxHIKQY7ZuyuSH7BV5DyMNsQmQw5Z5ejNYjKftKhJJbTd3yC@192.168.3.200:6379'
 #允许处理403返回头
 HTTPERROR_ALLOWED_CODES = [403]
 HTTPERROR_ALLOWED_CODES = [302]
