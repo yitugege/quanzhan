@@ -123,9 +123,9 @@ AUTOTHROTTLE_TARGET_CONCURRENCY = 1
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 SCHEDULER = "scrapy_redis.scheduler.Scheduler"
 DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
-#REDIS_HOST = '192.168.3.201'
-#REDIS_PORT = 6379
-REDIS_URL = 'redis://user:123123@192.168.3.201:6379'
+REDIS_HOST = '192.168.3.201'
+REDIS_PORT = 6379
+#REDIS_URL = 'redis://user:123123@192.168.3.201:6379'
 #允许处理403返回头
 HTTPERROR_ALLOWED_CODES = [403]
 HTTPERROR_ALLOWED_CODES = [302]

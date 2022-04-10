@@ -10,8 +10,8 @@ from scrapy_redis.spiders import RedisCrawlSpider
 
 class MercadolibreRedisSpider(RedisCrawlSpider):
     """Spider that reads urls from redis queue (myspider:start_urls)."""
-    name = 'zhili'
-    redis_key = 'zhili:start_urls'
+    name = 'agenting'
+    redis_key = 'agenting:start_urls'
 #爬取整站
     rules = (
         #Rule(LinkExtractor(allow=r'.*#c_id=.*'),follow=True),
@@ -68,11 +68,10 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
 
 
 
-        #获取价格 没有价格删除连接
-        price = response.xpath('//div[@class="ui-pdp-price__second-line"]/span[@class="andes-money-amount ui-pdp-price__part andes-money-amount--cents-superscript"]/span[@class="andes-money-amount__fraction"]/text()').get()
+         #获取价格 没有价格删除连接
+        price = response.xpath('//div[@class="ui-pdp-price__second-line"]/span[@class="andes-money-amount ui-pdp-price__part andes-money-amount--cents-superscript andes-money-amount--compact"]/span[@class="andes-money-amount__fraction"]/text()').get()
         if  price == None:
             title = "delete"
-        #    return
         #打印点赞人数,把数组中的数字提取出来转换城数字
         like_count = response.xpath('//a[@class="ui-pdp-review__label ui-pdp-review__label--link"]/span[@class="ui-pdp-review__amount"]/text()').get()
         if like_count != None:
@@ -80,7 +79,7 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
             like_count = list(map(int,like_count))
             like_count = like_count = like_count[0]
         else:
-            like_count = 0
+            like_count = None
 
         #print("-----------------------------------likeaccount--------------------------")
         #print(like_count)
