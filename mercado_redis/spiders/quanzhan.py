@@ -1,3 +1,4 @@
+from requests import delete
 from scrapy.spiders import Rule
 from scrapy import item
 from scrapy.linkextractors import LinkExtractor
@@ -90,7 +91,7 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
         #获取销量为0不抓,判读是否为usado,如果不是那么取整数，如果是不做操作,
         Num_sell = response.xpath('//div[@class="ui-pdp-header"]/div[@class="ui-pdp-header__subtitle"]/span[@class="ui-pdp-subtitle"]/text()').get()
         if  Num_sell is None:
-            return
+            title = "delete"
         #print("-----------------------------------Num_sell--------------------------")
         #print(Num_sell)
         #print(type(Num_sell))
@@ -102,7 +103,7 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
             #print(Num_sell)
             #print(type(Num_sell))
         else:
-            return
+            title = "delete"
         #获取60天销量
         days60_sell=response.xpath('//strong[@class="ui-pdp-seller__sales-description"]/text()').get()
         if days60_sell is None:
