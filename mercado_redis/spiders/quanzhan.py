@@ -44,6 +44,8 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
                                                             r'.*pdp_filters=category:.*',
                                                             r'.*method=add.*',
                                                             r'.*page=\d+',
+                                                            r'.*modal=false.*',
+                                                            r'.*pdp_filters.*',
                                                             r'.*/s$')),callback='parse',follow=True)
 
     )
