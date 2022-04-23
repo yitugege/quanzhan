@@ -65,14 +65,14 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
         if  id != []:
             id = abs(int("".join([str(x) for x in id])))
         else:
-            url=response.request.meta['redirect_urls'][0]
+            url=response.request.meta.get('redirect_urls')[0]
             id = re.findall(r"/M\w\w(\d+|-\d+|/)",url)
-            id = abs(int("".join([str(x) for x in id])))
+            id = abs(int("".join([str(x) for x in id])))    
 
 
 
          #获取价格 没有价格删除连接
-        price = response.xpath('//div[@class="ui-pdp-price__second-line"]/span[@class="andes-money-amount ui-pdp-price__part andes-money-amount--cents-superscript andes-money-amount--compact"]/span[@class="andes-money-amount__fraction"]/text()').get()
+        price = response.xpath("//div[@class='ui-pdp-price mt-16 ui-pdp-price--size-large']/div[@class='ui-pdp-price__second-line']/span[@class='andes-money-amount ui-pdp-price__part andes-money-amount--cents-superscript andes-money-amount--compact']/span[@class='andes-money-amount__fraction']/text()").get()
         if  price == None:
             title = "delete"
         #打印点赞人数,把数组中的数字提取出来转换城数字
