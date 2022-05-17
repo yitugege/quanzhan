@@ -11,8 +11,8 @@ from scrapy_redis.spiders import RedisCrawlSpider
 
 class MercadolibreRedisSpider(RedisCrawlSpider):
     """Spider that reads urls from redis queue (myspider:start_urls)."""
-    name = 'quanzhan'
-    redis_key = 'quanzhan:start_urls'
+    name = 'quanzhan1'
+    redis_key = 'quanzhan1:start_urls'
 #爬取整站
     rules = (
         #Rule(LinkExtractor(allow=r'.*#c_id=.*'),follow=True),
@@ -60,13 +60,13 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
         #链接
         url = response.url
         #获取商品ID,至少7位数字
-        id = re.findall(r"/M\w\w(\d+|-\d+|/){7,}",url)
+        id = re.findall(r"/M\w\w(\d{7,}|-\d{7,}|/)",url)
         #id = re.findall(r"\d{7,}",url)
         if  id != []:
             id = abs(int("".join([str(x) for x in id])))
         else:
             url=response.request.meta.get('redirect_urls')[0]
-            id = re.findall(r"/M\w\w(\d+|-\d+|/)",url)
+            id = re.findall(r"/M\w\w(\d{7,}|-\d{7,}|/)",url)
             id = abs(int("".join([str(x) for x in id])))
 
 
