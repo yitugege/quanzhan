@@ -11,8 +11,8 @@ from scrapy_redis.spiders import RedisCrawlSpider
 
 class MercadolibreRedisSpider(RedisCrawlSpider):
     """Spider that reads urls from redis queue (myspider:start_urls)."""
-    name = 'agenting'
-    redis_key = 'agenting:start_urls'
+    name = 'quanzhan'
+    redis_key = 'quanzhan:start_urls'
 #爬取整站
     rules = (
         #Rule(LinkExtractor(allow=r'.*#c_id=.*'),follow=True),
@@ -59,22 +59,22 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
             title = "delete"
         #链接
         url = response.url
-        #获取商品ID
-        id = re.findall(r"/M\w\w(\d+|-\d+|/)",url)
+        #获取商品ID,至少7位数字
+        id = re.findall(r"/M\w\w(\d+|-\d+|/){7,}",url)
         #id = re.findall(r"\d{7,}",url)
         if  id != []:
             id = abs(int("".join([str(x) for x in id])))
         else:
             url=response.request.meta.get('redirect_urls')[0]
             id = re.findall(r"/M\w\w(\d+|-\d+|/)",url)
-            id = abs(int("".join([str(x) for x in id])))    
+            id = abs(int("".join([str(x) for x in id])))
 
 
 
          #获取价格 没有价格删除连接
         price = response.xpath("//div[@class='ui-pdp-price mt-16 ui-pdp-price--size-large']/div[@class='ui-pdp-price__second-line']/span[@class='andes-money-amount ui-pdp-price__part andes-money-amount--cents-superscript andes-money-amount--compact']/span[@class='andes-money-amount__fraction']/text()").get()
         if  price == None:
-            title = "delete"
+            price = "delete"
         #打印点赞人数,把数组中的数字提取出来转换城数字
         like_count = response.xpath('//a[@class="ui-pdp-review__label ui-pdp-review__label--link"]/span[@class="ui-pdp-review__amount"]/text()').get()
         if like_count != None:
@@ -93,7 +93,7 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
         #获取销量为0不抓,判读是否为usado,如果不是那么取整数，如果是不做操作,
         Num_sell = response.xpath('//div[@class="ui-pdp-header"]/div[@class="ui-pdp-header__subtitle"]/span[@class="ui-pdp-subtitle"]/text()').get()
         if  Num_sell is None:
-            title = "delete"
+            Num_sell = "delete"
         #print("-----------------------------------Num_sell--------------------------")
         #print(Num_sell)
         #print(type(Num_sell))
@@ -105,7 +105,7 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
             #print(Num_sell)
             #print(type(Num_sell))
         else:
-            title = "delete"
+            Num_sell = "delete"
         #获取60天销量
         days60_sell=response.xpath('//strong[@class="ui-pdp-seller__sales-description"]/text()').get()
         if days60_sell is None:
