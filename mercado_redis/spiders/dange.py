@@ -38,19 +38,24 @@ class QuotesSpider(scrapy.Spider):
         title = response.xpath('//h1[@class="ui-pdp-title"]/text()').get()
         if  title == None:
             title = "delete"
+        #获取分类
+        category = response.xpath('//li[@class="andes-breadcrumb__item"][1]/a[@class="andes-breadcrumb__link"]/@title').get()    
         #链接
         url = response.url
+        if "vendidos" not in url:
         #获取商品ID非空那么插入，否则抓取302之前的url获取id从数据库删除
-        id = re.findall(r"/M\w\w(\d{5,}|-\d{5,}|/)",url)
-        print(id)
+            id = re.findall(r"/M\w\w(\d{7,}|-\d{7,}|/)",url)
+            print(id)
         #id = re.findall(r"\d{7,}",url)
-        if  id != []:
-            id = abs(int("".join([str(x) for x in id])))
-        else:
-            url=response.request.meta.get('redirect_urls')[0]
-            id = re.findall(r"/M\w\w(\d{5,}|-\d{5,}|/)",url)
-            id = abs(int("".join([str(x) for x in id])))
-        
+            if  id != []:
+                id = abs(int("".join([str(x) for x in id])))
+            else:
+                url=response.request.meta.get('redirect_urls')[0]
+                id = re.findall(r"/M\w\w(\d{5,}|-\d{5,}|/)",url)
+                id = abs(int("".join([str(x) for x in id])))
+        else:        
+                id = re.findall(r"/M\w\w(\d{5,}|-\d{5,}|/)",url)
+                category = "mas-vendidos"
 
          #获取价格 没有价格删除连接
         price = response.xpath("//div[@class='ui-pdp-price mt-16 ui-pdp-price--size-large']/div[@class='ui-pdp-price__second-line']/span[@class='andes-money-amount ui-pdp-price__part andes-money-amount--cents-superscript andes-money-amount--compact']/span[@class='andes-money-amount__fraction']/text()").get()
@@ -69,8 +74,7 @@ class QuotesSpider(scrapy.Spider):
         #print(like_count)
         #打印店铺
         #seller = response.xpath('//a[@class="ui-pdp-action-modal__link"]/span[@class="ui-pdp-color--BLUE"]/text()').get()
-        #获取分类
-        category = response.xpath('//li[@class="andes-breadcrumb__item"][1]/a[@class="andes-breadcrumb__link"]/@title').get()
+        
         #获取销量为0不抓,判读是否为usado,如果不是那么取整数，如果是不做操作,
         Num_sell = response.xpath('//div[@class="ui-pdp-header"]/div[@class="ui-pdp-header__subtitle"]/span[@class="ui-pdp-subtitle"]/text()').get()
         if  Num_sell is None:
