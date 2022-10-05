@@ -35,7 +35,7 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
                                                         )),follow=True),
         Rule(LinkExtractor(allow=r'.*CATEGORY_ID=.*'), follow=True),
         Rule(LinkExtractor(allow=r'.*%3Dcategory%.*'),follow=True),
-        Rule(LinkExtractor(allow=r'.*trends_tracking_id=.*'),deny=( r'.*/jms/mlm/lgz/login.*',
+        Rule(LinkExtractor(allow=r'.*trends_tracking_id=.*',deny=( r'.*/jms/mlm/lgz/login.*',
                                                             r'.*noindex.*',
                                                             r'.*auth.*',
                                                             r'.*product_trigger_id=M\w\w\d+',
