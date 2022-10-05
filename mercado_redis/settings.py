@@ -63,7 +63,7 @@ SPIDER_MIDDLEWARES = {
 #}
 DOWNLOADER_MIDDLEWARES = {
     'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
-#    'scrapy_fake_useragent.middleware.RandomUserAgentMiddleware': 400,
+    'scrapy_fake_useragent.middleware.RandomUserAgentMiddleware': 400,
     'mercado_redis.proxy.ProxyMiddleware':401,
     'mercado_redis.proxy.CheckStatusMiddleware':402,
 }
