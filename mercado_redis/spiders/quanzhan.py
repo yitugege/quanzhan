@@ -58,7 +58,7 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
                                                             r'.*pdp_filters.*',
                                                             r'.*/s$')),follow=True),#https://www.mercadolibre.com.mx/mas-vendidos#menu=categories 继续获取热销产品下的连接
         Rule(LinkExtractor(allow=r'.*/_Desde_.\d'),follow=True),#下一页  follow = true的意思是下一次提取网页中包含我们我们需要提取的信息,True代表继续提取
-        Rule(LinkExtractor(allow=r'.*/M\w\w(\{7,}|-\{7,}|/).*',deny=( r'.*/jms/mlm/lgz/login.*',
+        Rule(LinkExtractor(allow=r'.*/M\w\w(\d{7,}|-\d{7,}|/).*',deny=( r'.*/jms/mlm/lgz/login.*',
                                                             r'.*noindex.*',
                                                             r'.*auth.*',
                                                             r'.*product_trigger_id=M\w\w\d+',
