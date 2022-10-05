@@ -6,7 +6,7 @@ from datetime import date
 
 #采集指定url
 class QuotesSpider(scrapy.Spider):
-    name = "quanzhan"
+    name = "dange"
     #allowed_domains = ["mercadolibre.com.mx"]
     #start_urls = ["https://articulo.mercadolibre.com.mx"]
     #base_urls ='https://computacion.mercadolibre.com.mx/'
@@ -20,10 +20,10 @@ class QuotesSpider(scrapy.Spider):
             #  'https://www.mercadolibre.com.mx/sniper-elite-iii-ultimate-edition-505-games-xbox-one-fisico/p/MLM6165822#reco_item_pos=13&reco_backend=machinalis-pdp-v2p&reco_backend_type=low_level&reco_client=pdp-v2p&reco_id=15d78e2e-7533-4c4f-908e-822347a7aa9f',
             #  'https://articulo.mercadolibre.com.mx/MLM-1367897814-auricular-con-flex-compatible-con-iphone-x-_JM#position=1&search_layout=stack&type=pad&tracking_id=8407e428-916d-4214-84f6-5d5cd4caf4c4&is_advertising=true&ad_domain=VQCATCORE_LST&ad_position=1&ad_click_id=ZDBjOTQzNTgtMjcwMC00ZjhkLWIyMTYtNmY1NDEwNmExZDQ4',
             #  'https://www.mercadolivre.com.br/processador-gamer-amd-ryzen-5-3600-100-100000031box-de-6-nucleos-e-42ghz-de-frequncia/p/MLB15143240?hide_psmb=true',
-            #  'https://www.mercadolivre.com.br/processador-gamer-amd-ryzen-5-3600x-100-100000022box-de-6-nucleos-e-44ghz-de-frequncia/p/MLB15080182'
+              'https://www.mercadolivre.com.br/processador-gamer-amd-ryzen-5-3600x-100-100000022box-de-6-nucleos-e-44ghz-de-frequncia/p/MLB15080182'
             #'https://www.mercadolibre.com.mx/control-joystick-inalambrico-sony-playstation-dualshock-3-urban-camouflage/p/MLM10350491',
             #'https://articulo.mercadolibre.com.mx/MLM-1409310041-botella-de-agua-deportiva-anti-fugas-no-toxico-capacidad-2-l-_JM?variation=174427702295&hide_psmb=true',
-            'https://www.mercadolibre.com.mx/mas-vendidos/MLM189026#origin=vip'
+            #'https://www.mercadolibre.com.mx/mas-vendidos/MLM189026#origin=vip'
 
             ]
         for url in urls:
