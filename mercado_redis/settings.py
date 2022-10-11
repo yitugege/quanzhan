@@ -65,7 +65,7 @@ DOWNLOADER_MIDDLEWARES = {
     'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
     'scrapy_fake_useragent.middleware.RandomUserAgentMiddleware': 400,
     'mercado_redis.proxy.ProxyMiddleware':401,
-    'mercado_redis.proxy.CheckStatusMiddleware':402,
+    #'mercado_redis.proxy.CheckStatusMiddleware':402,
 }
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
