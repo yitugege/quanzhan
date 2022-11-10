@@ -11,8 +11,8 @@ from scrapy_redis.spiders import RedisCrawlSpider
 
 class MercadolibreRedisSpider(RedisCrawlSpider):
     """Spider that reads urls from redis queue (myspider:start_urls)."""
-    name = 'baxi'
-    redis_key = 'baxi:start_urls'
+    name = 'mexico'
+    redis_key = 'mexico:start_urls'
 #爬取整站
     rules = (
         #Rule(LinkExtractor(allow=r'.*#c_id=.*'),follow=True),
@@ -46,17 +46,17 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
                                                             r'.*modal=false.*',
                                                             r'.*pdp_filters.*',
                                                             r'.*/s$')),follow=True),
-        Rule(LinkExtractor(allow=r'.*-vendidos.*',deny=( r'.*/jms/mlm/lgz/login.*',
-                                                            r'.*noindex.*',
-                                                            r'.*auth.*',
-                                                            r'.*product_trigger_id=M\w\w\d+',
-                                                            r'.*/seller-info$',
-                                                            r'.*pdp_filters=category:.*',
-                                                            r'.*method=add.*',
-                                                            r'.*page=\d+',
-                                                            r'.*modal=false.*',
-                                                            r'.*pdp_filters.*',
-                                                            r'.*/s$')),follow=True),#https://www.mercadolibre.com.mx/mas-vendidos#menu=categories 继续获取热销产品下的连接
+        # Rule(LinkExtractor(allow=r'.*-vendidos.*',deny=( r'.*/jms/mlm/lgz/login.*',
+        #                                                     r'.*noindex.*',
+        #                                                     r'.*auth.*',
+        #                                                     r'.*product_trigger_id=M\w\w\d+',
+        #                                                     r'.*/seller-info$',
+        #                                                     r'.*pdp_filters=category:.*',
+        #                                                     r'.*method=add.*',
+        #                                                     r'.*page=\d+',
+        #                                                     r'.*modal=false.*',
+        #                                                     r'.*pdp_filters.*',
+        #                                                     r'.*/s$')),follow=True),#https://www.mercadolibre.com.mx/mas-vendidos#menu=categories 继续获取热销产品下的连接
         Rule(LinkExtractor(allow=r'.*/_Desde_.\d'),follow=True),#下一页  follow = true的意思是下一次提取网页中包含我们我们需要提取的信息,True代表继续提取
         Rule(LinkExtractor(allow=r'.*/M\w\w(\d{7,}|-\d{7,}|/).*',deny=( r'.*/jms/mlm/lgz/login.*',
                                                             r'.*noindex.*',
@@ -87,7 +87,7 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
         if "vendidos" not in url:
         #获取商品ID非空那么插入，否则抓取302之前的url获取id从数据库删除
             id = re.findall(r"/M\w\w(\d{7,}|-\d{7,}|/)",url)
-            print(id)
+            #print(id)
         #id = re.findall(r"\d{7,}",url)
             if  id != []:
                 id = abs(int("".join([str(x) for x in id])))
