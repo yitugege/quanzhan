@@ -146,7 +146,7 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
             days60_sell = None
         #记录爬取的时间
         current_time = date.today()
-
+        
         items['title']=title
         items['url']=url
         items['price']=price
