@@ -102,46 +102,61 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
          #获取价格 没有价格删除连接
         price = response.xpath("//div[@class='ui-pdp-price mt-16 ui-pdp-price--size-large']/div[@class='ui-pdp-price__second-line']/span[@class='andes-money-amount ui-pdp-price__part andes-money-amount--cents-superscript andes-money-amount--compact']/span[@class='andes-money-amount__fraction']/text()").get()
         if  price == None:
-            price = "delete"
+            title = "delete"
+
         #打印点赞人数,把数组中的数字提取出来转换城数字
-        like_count = response.xpath('//a[@class="ui-pdp-review__label ui-pdp-review__label--link"]/span[@class="ui-pdp-review__amount"]/text()').get()
-        if like_count != None:
+        like_count = response.xpath('//span[@class="ui-pdp-review__amount"]/text()').get()
+        # print("-----------------------------------likeaccount--------------------------")
+        # print(like_count)
+        if like_count is not None:
             like_count = re.findall(r"\d{1,}",like_count)
             like_count = list(map(int,like_count))
             like_count = like_count = like_count[0]
         else:
             like_count = None
 
-        #print("-----------------------------------likeaccount--------------------------")
-        #print(like_count)
         #打印店铺
         #seller = response.xpath('//a[@class="ui-pdp-action-modal__link"]/span[@class="ui-pdp-color--BLUE"]/text()').get()
 
-        #获取销量为0不抓,判读是否为usado,如果不是那么取整数，如果是不做操作,
+       #获取销量为0不抓,判读是否为usado,如果不是那么取整数，如果是不做操作,
         Num_sell = response.xpath('//div[@class="ui-pdp-header"]/div[@class="ui-pdp-header__subtitle"]/span[@class="ui-pdp-subtitle"]/text()').get()
+        # print("-----------------------------------Num_sell--------------------------")
+        # print(Num_sell)
         if  Num_sell is None:
-            Num_sell = "delete"
-        #print("-----------------------------------Num_sell--------------------------")
-        #print(Num_sell)
+            return
+            
+        elif Num_sell == "Nuevo":
+            return
+
         #print(type(Num_sell))
-        elif bool(re.findall(r'\d+',Num_sell)):
-            Num_sell = re.findall(r"\d+",Num_sell)
-            Num_sell = list(map(int,Num_sell))
-            Num_sell = Num_sell[0]
-            #print("-----------------------------------Num_sell--------------------------")
-            #print(Num_sell)
+        elif bool(re.findall(r'\d{1,}',Num_sell)):
+            if "mil" in Num_sell:
+                Num_sell = re.findall(r"\d{1,}",Num_sell) 
+                Num_sell = list(map(int,Num_sell))
+                Num_sell = Num_sell[0]*1000
+            else:
+                Num_sell = re.findall(r"\d{1,}",Num_sell)
+                Num_sell = list(map(int,Num_sell))
+                Num_sell = Num_sell[0]
+            # print("-----------------------------------Num_sell--------------------------")
+            # print(Num_sell)
             #print(type(Num_sell))
         else:
-            Num_sell = "delete"
+            pass
         #获取60天销量
         days60_sell=response.xpath('//strong[@class="ui-pdp-seller__sales-description"]/text()').get()
         if days60_sell is None:
             days60_sell = 0
         #    return
         elif bool(re.findall(r'\d+',days60_sell)):
-            days60_sell = re.findall(r'\d+',days60_sell)
-            days60_sell = list(map(int,days60_sell))
-            days60_sell = days60_sell[0]
+            if "mil" in days60_sell:
+                days60_sell = re.findall(r'\d+',days60_sell)
+                days60_sell = list(map(int,days60_sell))
+                days60_sell = days60_sell[0]*1000
+            else:
+                days60_sell = re.findall(r'\d+',days60_sell)
+                days60_sell = list(map(int,days60_sell))
+                days60_sell = days60_sell[0]
         else:
             days60_sell = None
         #记录爬取的时间
