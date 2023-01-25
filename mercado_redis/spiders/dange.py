@@ -22,9 +22,9 @@ class QuotesSpider(scrapy.Spider):
             # 'https://www.mercadolibre.com.mx/control-joystick-inalambrico-sony-playstation-dualshock-3-urban-camouflage/p/MLM10350491'
             #'https://www.mercadolibre.com.mx/amazon-echo-dot-3rd-gen-con-asistente-virtual-alexa-carbon-110v240v/p/MLM15534261?pdp_filters=deal:MLM779363-1#searchVariation=MLM15534261&position=1&search_layout=grid&type=product&tracking_id=ecd21790-35d9-4df8-9a68-42a89b2c9264&c_id=/home/promotions-recommendations/element&c_element_order=1&c_uid=c6d5fad0-4ab2-408d-ab0f-55b3c09adb83',
             #'https://articulo.mercadolibre.com.mx/MLM-1387799026-cable-hdmi-20-metros-full-hd-1080p-ps3-xbox-x-laptop-pc-tv-_JM#is_advertising=true&position=9&search_layout=stack&type=pad&tracking_id=2f3c11a6-0ae1-46de-a4ae-dc5293a81025&is_advertising=true&ad_domain=VQCATCORE_LST&ad_position=9&ad_click_id=M2ZiZDE5YjYtYWMxZi00MzUyLTgwNWYtZjUwMmI1MzNlMDA5'
-            'https://articulo.mercadolibre.com.mx/MLM-1409310041-botella-de-agua-deportiva-anti-fugas-no-toxico-capacidad-2-l-_JM?variation=174427702295&hide_psmb=true',
+            #'https://articulo.mercadolibre.com.mx/MLM-1409310041-botella-de-agua-deportiva-anti-fugas-no-toxico-capacidad-2-l-_JM?variation=174427702295&hide_psmb=true',
             #'https://www.mercadolibre.com.mx/mas-vendidos/MLM189026#origin=vip'
-            'https://articulo.mercadolibre.com.mx/MLM-1587558936-caja-de-almuerzo-portatil-para-horno-nevera-caja-de-almace-_JM'
+            'https://www.mercadolibre.com.mx/figura-de-accion-toy-story-woody-talking-figure-de-disney/p/MLM10204068'
             ]
         for url in urls:
             yield scrapy.Request(url=url,dont_filter=True,callback=self.parse)
