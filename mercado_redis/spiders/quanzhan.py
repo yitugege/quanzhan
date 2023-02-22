@@ -81,7 +81,13 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
         if  title == None:
             title = "delete"
          #获取分类
-        category = response.xpath('//li[@class="andes-breadcrumb__item"][1]/a[@class="andes-breadcrumb__link"]/@title').get()    
+
+        masvendidos = response.xpath('//div[@class="ui-pdp-promotions-pill-label best_seller_position ui-pdp-background-color--WHITE ui-pdp-color--BLUE ui-pdp-size--XXSMALL ui-pdp-family--SEMIBOLD"]/a[@class="ui-pdp-promotions-pill-label__target"]/text()').get()
+        
+        if (masvendidos != None):
+            category=masvendidos
+        else:
+            category = response.xpath('//li[@class="andes-breadcrumb__item"][1]/a[@class="andes-breadcrumb__link"]/@title').get()           
         #链接
         url = response.url
         if "vendidos" not in url:

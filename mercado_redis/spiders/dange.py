@@ -24,7 +24,8 @@ class QuotesSpider(scrapy.Spider):
             #'https://articulo.mercadolibre.com.mx/MLM-1387799026-cable-hdmi-20-metros-full-hd-1080p-ps3-xbox-x-laptop-pc-tv-_JM#is_advertising=true&position=9&search_layout=stack&type=pad&tracking_id=2f3c11a6-0ae1-46de-a4ae-dc5293a81025&is_advertising=true&ad_domain=VQCATCORE_LST&ad_position=9&ad_click_id=M2ZiZDE5YjYtYWMxZi00MzUyLTgwNWYtZjUwMmI1MzNlMDA5'
             #'https://articulo.mercadolibre.com.mx/MLM-1409310041-botella-de-agua-deportiva-anti-fugas-no-toxico-capacidad-2-l-_JM?variation=174427702295&hide_psmb=true',
             #'https://www.mercadolibre.com.mx/mas-vendidos/MLM189026#origin=vip'
-            'https://www.mercadolibre.com.mx/figura-de-accion-toy-story-woody-talking-figure-de-disney/p/MLM10204068'
+            'https://www.mercadolibre.com.mx/figura-de-accion-toy-story-woody-talking-figure-de-disney/p/MLM10204068',
+            'https://articulo.mercadolibre.com.mx/MLM-813472287-funda-acrigel-alta-calidad-para-oleo-varias-marcas-_JM'
             ]
         for url in urls:
             yield scrapy.Request(url=url,dont_filter=True,callback=self.parse)
@@ -38,8 +39,13 @@ class QuotesSpider(scrapy.Spider):
         title = response.xpath('//h1[@class="ui-pdp-title"]/text()').get()
         if  title == None:
             title = "delete"
-        #获取分类
-        category = response.xpath('//li[@class="andes-breadcrumb__item"][1]/a[@class="andes-breadcrumb__link"]/@title').get()    
+        #获取分类////div[@class='ui-pdp-promotions-pill mt-10 ui-pdp-highlights']
+        masvendidos = response.xpath('//div[@class="ui-pdp-promotions-pill-label best_seller_position ui-pdp-background-color--WHITE ui-pdp-color--BLUE ui-pdp-size--XXSMALL ui-pdp-family--SEMIBOLD"]/a[@class="ui-pdp-promotions-pill-label__target"]/text()').get()
+        print(masvendidos)
+        if (masvendidos != None):
+            category = masvendidos
+        else:
+            category = response.xpath('//li[@class="andes-breadcrumb__item"][1]/a[@class="andes-breadcrumb__link"]/@title').get()    
         #链接
         url = response.url
         if "vendidos" not in url:
@@ -55,7 +61,6 @@ class QuotesSpider(scrapy.Spider):
                 id = abs(int("".join([str(x) for x in id])))
         else:        
                 id = re.findall(r"/M\w\w(\d{5,}|-\d{5,}|/)",url)
-                category = "mas-vendidos"
 
          #获取价格 没有价格删除连接
         price = response.xpath("//div[@class='ui-pdp-price mt-16 ui-pdp-price--size-large']/div[@class='ui-pdp-price__second-line']/span[@class='andes-money-amount ui-pdp-price__part andes-money-amount--cents-superscript andes-money-amount--compact']/span[@class='andes-money-amount__fraction']/text()").get()
