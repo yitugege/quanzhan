@@ -85,20 +85,17 @@ class MercadolibreRedisSpider(RedisCrawlSpider):
         #链接
         url = response.url
         if "vendidos" not in url:
-        #获取商品ID非空那么插入，否则抓取302之前的url获取id从数据库删除
-            id = re.findall(r"/M\w\w(\d{7,}|-\d{7,}|/)",url)
-            print(id)
-        #id = re.findall(r"\d{7,}",url)
-            if  id != []:
-                id = abs(int("".join([str(x) for x in id])))
-            else:
-                url=response.request.meta.get('redirect_urls')[0]
-                id = re.findall(r"/M\w\w(\d{5,}|-\d{5,}|/)",url)
-                id = abs(int("".join([str(x) for x in id])))
-        else:        
-                id = re.findall(r"/M\w\w(\d{5,}|-\d{5,}|/)",url)
-                category = "mas-vendidos"
+            # 获取商品ID非空那么插入，否则抓取302之前的url获取id从数据库删除
+            # id = re.findall(r"/M\w\w(\d{7,}|-\d{7,}|/)", url)
+            match = re.search(r'/M\w\w-(\d{7,})|/p/M\w\w(\d{7,})', url)
+            if match:
+                # 如果是第一种模式，则group(1)会捕获到ID，而group(2)为None
+                # 如果是第二种模式，则group(2)会捕获到ID，而group(1)为None
+                id = match.group(1) or match.group(2)
+                #print('id===='+id)
 
+        else:
+            id = re.findall(r"/M\w\w(\d{5,}|-\d{5,}|/)", url)
          #获取价格 没有价格删除连接
         price = response.xpath("//span[@class='andes-money-amount ui-pdp-price__part andes-money-amount--cents-superscript andes-money-amount--compact']/span[@class='andes-money-amount__fraction']/text()").get()
         if  price == None:
